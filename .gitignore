@@ -80,6 +80,8 @@ ipch/
 *.opensdf
 *.sdf
 *.cachefile
+*.dll
+**/*.dll
 **/*.aps
 **/*.ncb
 **/*.opendb

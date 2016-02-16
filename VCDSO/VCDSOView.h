@@ -19,9 +19,14 @@ protected: // create from serialization only
 // Attributes
 public:
 	CVCDSODoc* GetDocument();
+	CVCDSODoc* m_pDoc;
+	CRect m_rcGrid;
 
 // Operations
 public:
+	void DrawWave(CDC* pDC,CRect Rect);
+	void DrawWaveInYT(CDC* pDC,CRect Rect,USHORT nCH);
+	void DrawGrid(CDC* pDC,CRect Rect);
 
 // Overrides
 	// ClassWizard generated virtual function overrides
@@ -29,6 +34,7 @@ public:
 	public:
 	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+	virtual void OnInitialUpdate();
 	protected:
 	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
 	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
@@ -48,8 +54,9 @@ protected:
 // Generated message map functions
 protected:
 	//{{AFX_MSG(CVCDSOView)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
+	afx_msg void OnTimer(UINT nIDEvent);
+	afx_msg void OnPaint();
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

@@ -80,5 +80,30 @@ void CVCDSODoc::Dump(CDumpContext& dc) const
 }
 #endif //_DEBUG
 
+void CVCDSODoc::CollectData()
+{
+	short nState = 0;
+
+	if(m_bStartNew)
+	{
+		WORD nStartControl=0;
+		nStartControl|=((m_Hard.m_nTriggerSweep==AUTO)?0x01:0);//add by zhang
+		nStartControl|=((m_Hard.m_nYTFormat== YT_ROLL)?0x02:0);//add by zhang
+		nStartControl|=m_Hard.m_bCollect?0:0x04;//add by zhang
+		dsoHTStartCollectData(m_Hard.m_nDeviceIndex,nStartControl);
+	//	dsoHTStartTrigger(m_Hard.m_nDeviceIndex);
+//		m_nAutoTriggerCnt = 0;
+		m_bStartNew = FALSE;
+	}
+	nState = dsoHTGetState(m_Hard.m_nDeviceIndex);
+	if(nState&0x02)	
+	{
+		m_Hard.ReadData();
+		m_bStartNew = TRUE;		
+		
+	}else{
+		m_bStartNew = FALSE;	
+	}
+}
 /////////////////////////////////////////////////////////////////////////////
 // CVCDSODoc commands

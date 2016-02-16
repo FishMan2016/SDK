@@ -9,6 +9,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "Hard.h"
+
 
 class CVCDSODoc : public CDocument
 {
@@ -18,9 +20,14 @@ protected: // create from serialization only
 
 // Attributes
 public:
+	CHard m_Hard;
+
+	BOOL m_bStartNew;//是否启动新一次采集
+	//USHORT m_nAutoTriggerCnt;
 
 // Operations
 public:
+	void CollectData();
 
 // Overrides
 	// ClassWizard generated virtual function overrides
