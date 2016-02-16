@@ -22,13 +22,14 @@
 #include <math.h>
 #include "..\\..\\HeadFiles\\HTDisplayDll.h"
 #include "..\\..\\HeadFiles\\HTHardDll.h"
-#include "..\\..\\HeadFiles\\HTLANDll.h"
+#include "..\\..\\HeadFiles\\DefMacro.h"
+#include "..\\..\\HeadFiles\\DefMacro.h"
 //导入画图DLL
 #pragma comment(lib,"..\\..\\Lib\\HTDisplayDll.lib")
 //导入操作硬件DLL
 #pragma comment(lib,"..\\..\\Lib\\HTHardDll.lib")
 //
-#pragma comment(lib,"..\\..\\Lib\\HTLANDll.lib")
+
 
 #define MAX_DATA					255
 #define BUF_10K_LEN					10240
