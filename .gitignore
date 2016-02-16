@@ -80,6 +80,12 @@ ipch/
 *.opensdf
 *.sdf
 *.cachefile
+**/*.aps
+**/*.ncb
+**/*.opendb
+**/*.opensdf
+**/*.sdf
+**/*.cachefile
 
 # Visual Studio profiler
 *.psess
