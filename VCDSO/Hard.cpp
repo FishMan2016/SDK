@@ -45,7 +45,7 @@ CHard::CHard()
 	for(i=0;i<MAX_CH_NUM;i++)
 	{
 		RelayControl.bCHEnable[i] = 1;
-		RelayControl.nCHVoltDIV[i] = 2;
+		RelayControl.nCHVoltDIV[i] = 5;
 		RelayControl.nCHCoupling[i] = AC;
 		RelayControl.bCHBWLimit[i] = 0;
 	}	
@@ -55,10 +55,10 @@ CHard::CHard()
 	m_nTriggerMode = EDGE;
 	m_nTriggerSlope = RISE;
 	m_nTriggerSweep = AUTO;
-	m_nLeverPos[CH1] = 128;
-	m_nLeverPos[CH2] = 128;
-	m_nLeverPos[CH3] = 128;
-	m_nLeverPos[CH4] = 128; 
+	m_nLeverPos[CH1] = 80;
+	m_nLeverPos[CH2] = 112;
+	m_nLeverPos[CH3] = 144;
+	m_nLeverPos[CH4] = 176; 
 	m_bCollect=TRUE;
 	m_nReadOK = 0;
 
@@ -78,8 +78,8 @@ void CHard::Init()
 	dsoHTADCCHModGain(m_nDeviceIndex,4);
 	dsoHTReadCalibrationData(m_nDeviceIndex,m_nCalLevel,CAL_LEVEL_LEN);//读取0电平校准数据
 	{
-	//	if(m_nCalLevel[CAL_LEVEL_LEN-1]!=ZERO_FLAG){
-		if(1){
+		if(m_nCalLevel[CAL_LEVEL_LEN-1]!=ZERO_FLAG){
+		//if(1){
 				int xxxxxxx=0;
 				for(int i=0;i< ZEROCALI_LEN;i++){
 					int nVolt=(i%ZEROCALI_PER_CH_LEN)/ZEROCALI_PER_VOLT_LEN;
