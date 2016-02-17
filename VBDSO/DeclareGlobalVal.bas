@@ -21,6 +21,9 @@ Type CONTROLDATA
     nReadDataLen As Long
     nAlreadyReadLen As Long
     nALT As Integer
+    nETSOpen As Integer
+    nDriverCode As Integer
+    nLastAddress As Long
 End Type
 
 Type COLORREF
@@ -36,18 +39,18 @@ Type RECT
     Bottom As Integer
 End Type
 '''''''''''''
-Public ComType As Integer 'ComType = 0 :USB
+
 Public DeviceNum As Long
 Public DeviceIndex As Long
-Public CH1SrcData(10239) As Integer
-Public CH2SrcData(10239) As Integer
-Public CH3SrcData(10239) As Integer
-Public CH4SrcData(10239) As Integer
+Public CH1SrcData(4096) As Integer
+Public CH2SrcData(4096) As Integer
+Public CH3SrcData(4096) As Integer
+Public CH4SrcData(4096) As Integer
 Public CH1Color As COLORREF
 Public CH2Color As COLORREF
 Public CH3Color As COLORREF
 Public CH4Color As COLORREF
-Public CalLevel(71) As Long
+Public CalLevel(578) As Long
 Public TimeDIV As Long
 Public YTFormat As Long
 Public stControl As CONTROLDATA
@@ -58,5 +61,7 @@ Public TriggerSlope As Long
 Public LeverPos(3) As Long
 Public ReadOK As Long
 Public StartNew As Boolean
-Public ForceTriggerCnt As Integer
 Public DisLen As Long
+Public Collect As Integer
+Public pAmpLevel(578) As Long
+

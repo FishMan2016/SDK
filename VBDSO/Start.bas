@@ -18,7 +18,6 @@ End Sub
 Public Sub InitializeVariables()
 Dim i As Long
     i = 0
-    ComType = 0 'USB deault
     DeviceNum = 0
     DeviceIndex = 0
     LeverPos(0) = 64
@@ -53,49 +52,40 @@ Dim i As Long
     ReadOK = 0
     StartNew = True
     ForceTriggerCnt = 0
+    Collect = 1
+    For i = 0 To 285
+        pAmpLevel(i) = 1024
+    Next i
     
 End Sub
 
 
 Public Sub InitHard()
-    'Dim i As Long
-   ' Dim result As Long
-   ' DeviceIndex = 0
-   ' result = dsoSetUSBBus(DeviceIndex)
-   ' result = dsoHTReadCalibrationData(DeviceIndex, CalLevel(0), 72)
-   ' result = dsoHTSetSampleRate(DeviceIndex, TimeDIV, YTFormat)
-   ' result = dsoHTSetCHAndTriggerVB(DeviceIndex, rcRelayControl.bCHEnable(0), rcRelayControl.nCHVoltDIV(0), rcRelayControl.nCHCoupling(0), rcRelayControl.bCHBWLimit(0), rcRelayControl.nTrigSource, rcRelayControl.bTrigFilt, rcRelayControl.nALT)
-   ' result = dsoHTSetTriggerAndSyncOutput(DeviceIndex, TriggerMode, TriggerSlope, 0, 2, 0, 0, 1, 0)
-   ' For i = 0 To 3
-     '   result = dsoHTSetCHPos(DeviceIndex, CalLevel(0), rcRelayControl.nCHVoltDIV(i), 255 - LeverPos(i), i)
-    'Next i
-    'result = dsoHTSetVTriggerLevel(DeviceIndex, CalLevel(0), 255 - LeverPos(0))
-    'result = dsoHTSetHTriggerLength(DeviceIndex, stControl.nBufferLen, stControl.nHTriggerPos, TimeDIV, YTFormat)
-    
+    Dim result As Long
     DeviceIndex = 0
     Dim i As Integer
     Dim nVolt As Integer
-    dsoSetUSBBus (DeviceIndex)
-    dsoInitADCOnce (DeviceIndex)
-    dsoHTADCCHModGain(DeviceIndex,4)
-    dsoHTReadCalibrationData(DeviceIndex,CalLevel(0),577)'读取0电平校准数据
-    if(CalLevel(576)!=64463) then
+    result = dsoSetUSBBus(DeviceIndex)
+    result = dsoInitADCOnce(DeviceIndex)
+    result = dsoHTADCCHModGain(DeviceIndex, 4)
+    result = dsoHTReadCalibrationData(DeviceIndex, CalLevel(0), 577)
+    If CalLevel(576) <> 64463 Then
         For i = 0 To 576
-            nVolt = (i Mod ZEROCALI_PER_CH_LEN) / ZEROCALI_PER_VOLT_LEN
+            nVolt = (i Mod 144) / 12
             If (nVolt = 5 Or nVolt = 8 Or nVolt = 11) Then
                 Dim nTemp As Integer
-                nTemp=i Mod ZEROCALI_PER_CH_LEN) Mod ZEROCALI_PER_VOLT_LEN
+                nTemp = (i Mod 144) Mod 12
                 If nTemp = 0 Then
                     CalLevel(i) = 16602
-                else if nTemp=1 then
+                ElseIf nTemp = 1 Then
                     CalLevel(i) = 60111
-                else if nTemp=2 then
+                ElseIf nTemp = 2 Then
                     CalLevel(i) = 17528
-                else if nTemp=3 then
+                ElseIf nTemp = 3 Then
                     CalLevel(i) = 59201
-                else if nTemp=4 then
+                ElseIf nTemp = 4 Then
                     CalLevel(i) = 17710
-                else if nTemp=5 then
+                ElseIf nTemp = 5 Then
                     CalLevel(i) = 58900
                 Else
                     CalLevel(i) = 0
@@ -103,46 +93,39 @@ Public Sub InitHard()
             End If
         Next i
     End If
-    dsoHTSetSampleRate(DeviceIndex,pAmpLevel(0),YTFormat,VarPtr(RelayControl),VarPtr(m_stControl))'设置采样率
-    dsoHTSetCHAndTrigger(DeviceIndex,Varptr(RelayControl),0,VarPtr(m_stControl))'设置通道开关和电压档位
-    dsoHTsetRamAndTrigerControl(DeviceIndex,m_stControl.nTimeDIV,m_stControl.nCHSet,m_stControl.nTriggerSource,0)'设置触发源
-    dsoHTSetADC(DeviceIndex,VarPtr(RelayControl),m_stControl.nTimeDIV)
-    for(int i=0i<MAX_CH_NUMi++)
-    {
-        dsoHTSetCHPos(DeviceIndex,CalLevel,RelayControl.nCHVoltDIV(i),128,i,4)
-    }
+    result = dsoHTSetSampleRate(DeviceIndex, pAmpLevel(0), YTFormat, VarPtr(rcRelayControl), VarPtr(stControl)) '设置采样率
+    result = dsoHTSetCHAndTrigger(DeviceIndex, VarPtr(rcRelayControl), 0, VarPtr(stControl)) '设置通道开关和电压档位
+    result = dsoHTsetRamAndTrigerControl(DeviceIndex, (stControl.nTimeDIV), (stControl.nCHSet), (stControl.nTriggerSource), 0) '设置触发源
+    result = dsoHTSetADC(DeviceIndex, VarPtr(rcRelayControl), stControl.nTimeDIV)
+    For i = 0 To 3
+        result = dsoHTSetCHPos(DeviceIndex, CalLevel(0), rcRelayControl.nCHVoltDIV(i), 128, i, 4)
+    Next i
 
-    dsoHTSetVTriggerLevel(DeviceIndex,CalLevel,MAX_DATA-m_nLeverPos[(0),4)
-    switch (m_nTriggerMode) {'触发设置
-        Case EDGE:
-            dsoHTSetTrigerMode(DeviceIndex,m_nTriggerMode,m_stControl.nTriggerSlope,DC)
-            break
-default:
-            break
-       }
-
+    result = dsoHTSetVTriggerLevel(DeviceIndex, CalLevel(0), 255 - LeverPos(0), 4)
+    If TriggerMode = 0 Then 'EDGE
+        result = dsoHTSetTrigerMode(DeviceIndex, TriggerMode, stControl.nTriggerSlope, 1)
+    End If
 End Sub
 
 
 Public Sub CollectData()
-    Dim nState As Integer
+    Dim nState As Long
     Dim result As Long
     If (StartNew) Then
         Dim nStartControl As Integer
         nStartControl = 0
-        nStartControl+=IIF(TriggerSweep=0,1,0)
-        nStartControl+=IIF(YTFormat=0,2,0)
-        nStartControl+=IIF(Collect=1,0,4)
+        nStartControl = nStartControl + IIf(TriggerSweep = 0, 1, 0)
+        nStartControl = nStartControl + IIf(YTFormat = 0, 2, 0)
+        nStartControl = nStartControl + IIf(Collect = 1, 0, 4)
         result = dsoHTStartCollectData(DeviceIndex, nStartControl)
         StartNew = False
    End If
     nState = dsoHTGetState(DeviceIndex)
-    If (nState&2) = 2 Then
+    If (nState And 2) = 2 Then
         ReadData
         StartNew = True
     Else
         ReadData
-        ForceTriggerCnt = 0
         StartNew = False
             
     End If
@@ -156,7 +139,7 @@ Public Sub ReadData()
     Dim CH2ReadData(4096) As Integer
     Dim CH3ReadData(4096) As Integer
     Dim CH4ReadData(4096) As Integer
-    result = dsoHTGetData(DeviceIndex, CH1ReadData(0), CH2ReadData(0), CH3ReadData(0), CH4ReadData(0), stControl)
+    result = dsoHTGetData(DeviceIndex, CH1ReadData(0), CH2ReadData(0), CH3ReadData(0), CH4ReadData(0), VarPtr(stControl))
     If result = 1 Then
         For i = 0 To stControl.nReadDataLen - 1
             CH1SrcData(i) = CH1ReadData(i) - (255 - LeverPos(0))
