@@ -1,7 +1,7 @@
 Attribute VB_Name = "Start"
 
 Sub Main()
-    Dim DevInfo(63) As Long
+    Dim DevInfo(63) As Integer
     Dim result As Long
     Dim ip(4) As Integer
     InitializeVariables '初始化变量
@@ -24,7 +24,7 @@ Dim i As Long
     LeverPos(1) = 96
     LeverPos(2) = 160
     LeverPos(3) = 192
-    TimeDIV = 12
+    TimeDIV = 17
     YTFormat = 0
     stControl.nCHSet = 15
     stControl.nTimeDIV = 12
@@ -39,7 +39,7 @@ Dim i As Long
     stControl.nALT = 0
     For i = 0 To 3
         rcRelayControl.bCHEnable(i) = 1
-        rcRelayControl.nCHVoltDIV(i) = 6
+        rcRelayControl.nCHVoltDIV(i) = 8
         rcRelayControl.nCHCoupling(i) = 1
         rcRelayControl.bCHBWLimit(i) = 0
     Next i
@@ -53,7 +53,7 @@ Dim i As Long
     StartNew = True
     ForceTriggerCnt = 0
     Collect = 1
-    For i = 0 To 285
+    For i = 0 To 578
         pAmpLevel(i) = 1024
     Next i
     
@@ -69,7 +69,7 @@ Public Sub InitHard()
     result = dsoInitADCOnce(DeviceIndex)
     result = dsoHTADCCHModGain(DeviceIndex, 4)
     result = dsoHTReadCalibrationData(DeviceIndex, CalLevel(0), 577)
-    If CalLevel(576) <> 64463 Then
+    If (CalLevel(576) And &HFFFF) <> &HFBCF Then
         For i = 0 To 576
             nVolt = (i Mod 144) / 12
             If (nVolt = 5 Or nVolt = 8 Or nVolt = 11) Then
@@ -93,10 +93,10 @@ Public Sub InitHard()
             End If
         Next i
     End If
-    result = dsoHTSetSampleRate(DeviceIndex, pAmpLevel(0), YTFormat, VarPtr(rcRelayControl), VarPtr(stControl)) '设置采样率
-    result = dsoHTSetCHAndTrigger(DeviceIndex, VarPtr(rcRelayControl), 0, VarPtr(stControl)) '设置通道开关和电压档位
-    result = dsoHTsetRamAndTrigerControl(DeviceIndex, (stControl.nTimeDIV), (stControl.nCHSet), (stControl.nTriggerSource), 0) '设置触发源
-    result = dsoHTSetADC(DeviceIndex, VarPtr(rcRelayControl), stControl.nTimeDIV)
+    result = dsoHTSetSampleRate(DeviceIndex, pAmpLevel(0), YTFormat, rcRelayControl, stControl) '设置采样率
+    result = dsoHTSetCHAndTrigger(DeviceIndex, rcRelayControl, 0, stControl) '设置通道开关和电压档位
+    result = dsoHTSetRamAndTrigerControl(DeviceIndex, (stControl.nTimeDIV), (stControl.nCHSet), (stControl.nTriggerSource), 0) '设置触发源
+    result = dsoHTSetADC(DeviceIndex, rcRelayControl, stControl.nTimeDIV)
     For i = 0 To 3
         result = dsoHTSetCHPos(DeviceIndex, CalLevel(0), rcRelayControl.nCHVoltDIV(i), 128, i, 4)
     Next i
@@ -125,7 +125,7 @@ Public Sub CollectData()
         ReadData
         StartNew = True
     Else
-        ReadData
+        
         StartNew = False
             
     End If
@@ -139,7 +139,7 @@ Public Sub ReadData()
     Dim CH2ReadData(4096) As Integer
     Dim CH3ReadData(4096) As Integer
     Dim CH4ReadData(4096) As Integer
-    result = dsoHTGetData(DeviceIndex, CH1ReadData(0), CH2ReadData(0), CH3ReadData(0), CH4ReadData(0), VarPtr(stControl))
+    result = dsoHTGetData(DeviceIndex, CH1ReadData(0), CH2ReadData(0), CH3ReadData(0), CH4ReadData(0), stControl)
     If result = 1 Then
         For i = 0 To stControl.nReadDataLen - 1
             CH1SrcData(i) = CH1ReadData(i) - (255 - LeverPos(0))

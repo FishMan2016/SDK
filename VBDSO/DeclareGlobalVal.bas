@@ -50,7 +50,7 @@ Public CH1Color As COLORREF
 Public CH2Color As COLORREF
 Public CH3Color As COLORREF
 Public CH4Color As COLORREF
-Public CalLevel(578) As Long
+Public CalLevel(578) As Integer
 Public TimeDIV As Long
 Public YTFormat As Long
 Public stControl As CONTROLDATA
@@ -63,5 +63,4 @@ Public ReadOK As Long
 Public StartNew As Boolean
 Public DisLen As Long
 Public Collect As Integer
-Public pAmpLevel(578) As Long
-
+Public pAmpLevel(578) As Integer

@@ -23,7 +23,7 @@
 #include "..\\..\\HeadFiles\\HTDisplayDll.h"
 #include "..\\..\\HeadFiles\\HTHardDll.h"
 #include "..\\..\\HeadFiles\\DefMacro.h"
-#include "..\\..\\HeadFiles\\DefMacro.h"
+
 //导入画图DLL
 #pragma comment(lib,"..\\..\\Lib\\HTDisplayDll.lib")
 //导入操作硬件DLL

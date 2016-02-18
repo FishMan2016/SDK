@@ -74,7 +74,7 @@ void CHard::Init()
 {
 	m_nDeviceIndex = 0;
 	dsoSetUSBBus(m_nDeviceIndex);
-		dsoInitADCOnce(m_nDeviceIndex);
+	dsoInitADCOnce(m_nDeviceIndex);
 	dsoHTADCCHModGain(m_nDeviceIndex,4);
 	dsoHTReadCalibrationData(m_nDeviceIndex,m_nCalLevel,CAL_LEVEL_LEN);//读取0电平校准数据
 	{
@@ -113,7 +113,7 @@ void CHard::Init()
 	}
 	dsoHTSetSampleRate(m_nDeviceIndex,pAmpLevel,m_nYTFormat,&RelayControl,&m_stControl);//设置采样率
 	dsoHTSetCHAndTrigger(m_nDeviceIndex,&RelayControl,0,&m_stControl);//设置通道开关和电压档位
-	dsoHTsetRamAndTrigerControl(m_nDeviceIndex,m_stControl.nTimeDIV,m_stControl.nCHSet,m_stControl.nTriggerSource,0);//设置触发源
+	dsoHTSetRamAndTrigerControl(m_nDeviceIndex,m_stControl.nTimeDIV,m_stControl.nCHSet,m_stControl.nTriggerSource,0);//设置触发源
 	dsoHTSetADC(m_nDeviceIndex,&RelayControl,m_stControl.nTimeDIV);
 	for(int i=0;i<MAX_CH_NUM;i++)
 	{

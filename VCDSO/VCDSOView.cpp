@@ -93,6 +93,8 @@ void CVCDSOView::AssertValid() const
 void CVCDSOView::Dump(CDumpContext& dc) const
 {
 	CView::Dump(dc);
+
+
 }
 
 CVCDSODoc* CVCDSOView::GetDocument() // non-debug version is inline
