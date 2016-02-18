@@ -24,10 +24,10 @@ Dim i As Long
     LeverPos(1) = 96
     LeverPos(2) = 160
     LeverPos(3) = 192
-    TimeDIV = 17
+    TimeDIV = 12
     YTFormat = 0
     stControl.nCHSet = 15
-    stControl.nTimeDIV = 12
+    stControl.nTimeDIV = TimeDIV
     stControl.nTriggerSource = 0
     stControl.nHTriggerPos = 50
     stControl.nVTriggerPos = LeverPos(0)
@@ -103,7 +103,7 @@ Public Sub InitHard()
 
     result = dsoHTSetVTriggerLevel(DeviceIndex, CalLevel(0), 255 - LeverPos(0), 4)
     If TriggerMode = 0 Then 'EDGE
-        result = dsoHTSetTrigerMode(DeviceIndex, TriggerMode, stControl.nTriggerSlope, 1)
+        result = dsoHTSetTrigerMode(DeviceIndex, TriggerMode, stControl.nTriggerSlope, 0)
     End If
 End Sub
 

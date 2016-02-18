@@ -67,7 +67,12 @@ Private Sub GetDataLoop_Timer()
    result = HTDrawWaveInYTVB(MainForm.DisplayPicture.hDC, 15, 15, MainForm.DisplayPicture.ScaleWidth - 15, MainForm.DisplayPicture.ScaleHeight - 15, 0, 255, 255, 0, CH2SrcData(0), stControl.nReadDataLen, DisLen, stControl.nReadDataLen / 2, LeverPos(1), 1#, 1#, 0, stControl.nAlreadyReadLen)
    result = HTDrawWaveInYTVB(MainForm.DisplayPicture.hDC, 15, 15, MainForm.DisplayPicture.ScaleWidth - 15, MainForm.DisplayPicture.ScaleHeight - 15, 255, 0, 255, 0, CH3SrcData(0), stControl.nReadDataLen, DisLen, stControl.nReadDataLen / 2, LeverPos(2), 1#, 1#, 0, stControl.nAlreadyReadLen)
    result = HTDrawWaveInYTVB(MainForm.DisplayPicture.hDC, 15, 15, MainForm.DisplayPicture.ScaleWidth - 15, MainForm.DisplayPicture.ScaleHeight - 15, 0, 255, 0, 0, CH4SrcData(0), stControl.nReadDataLen, DisLen, stControl.nReadDataLen / 2, LeverPos(3), 1#, 1#, 0, stControl.nAlreadyReadLen)
+'HTDrawWaveInYTVB(HDC hDC,int left,int top,int right, int bottom, USHORT R, USHORT G,
+                                   '   USHORT B,USHORT nDisType,short* pSrcData,ULONG nSrcDataLen,ULONG nDisDataLen,ULONG nCenterData,
+                                    '  USHORT nDisLeverPos,double dbHorizontal,double dbVertical,USHORT nYTFormat,ULONG nScanLen);
+'HTDrawWaveInYT(HDC hDC,RECT Rect,COLORREF clrRGB,USHORT nDisType,short* pSrcData,ULONG nSrcDataLen,ULONG nDisDataLen,ULONG nCenterData,USHORT nDisLeverPos,double dbHorizontal,double dbVertical,USHORT nYTFormat,ULONG nScanLen);
 
+'HTDrawWaveInYT(pDC->GetSafeHdc(),Rect,clrRGB,nDisType,pData,nSrcDataLen,nDisDataLen,nCenterData,nDisLeverPos,dbHorizontal,dbVertical,nYTFormat,m_pDoc->m_Hard.m_stControl.nAlreadyReadLen);//DLL import
 End Sub
 
 Public Sub DrawGrid()

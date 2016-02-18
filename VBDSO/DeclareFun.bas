@@ -7,9 +7,9 @@ Public Declare Function dsoSetUSBBus Lib "HTHardDll.dll" (ByVal nDeviceIndex As 
 'dsoHTReadCalibrationData(WORD nDeviceIndex,WORD* pLevel,WORD nLen);
 Public Declare Function dsoHTReadCalibrationData Lib "HTHardDll.dll" (ByVal nDeviceIndex As Integer, pLevel As Integer, ByVal nLen As Integer) As Integer
 'dsoHTSetSampleRate(WORD nDeviceIndex,WORD *pAmpLevel,WORD nYTFormat,PRELAYCONTROL pRelayControl,PCONTROLDATA pControl)
-Public Declare Function dsoHTSetSampleRate Lib "HTHardDll.dll" (ByVal nDeviceIndex As Integer, pAmpLevel As Integer, ByVal nYTFormat As Integer, pRelayControl As Long, pSTControl As Long) As Integer
+Public Declare Function dsoHTSetSampleRate Lib "HTHardDll.dll" (ByVal nDeviceIndex As Integer, pAmpLevel As Integer, ByVal nYTFormat As Integer, pRelayControl As Any, pSTControl As Any) As Integer
 'dsoHTSetCHAndTrigger(WORD nDeviceIndex,PRELAYCONTROL pRelayControl,WORD nDriverCode,PCONTROLDATA pControl)
-Public Declare Function dsoHTSetCHAndTrigger Lib "HTHardDll.dll" (ByVal nDeviceIndex As Integer, rcRelayControl As Long, ByVal Driver As Integer, pSTControl As Long) As Integer
+Public Declare Function dsoHTSetCHAndTrigger Lib "HTHardDll.dll" (ByVal nDeviceIndex As Integer, rcRelayControl As Any, ByVal Driver As Integer, pSTControl As Any) As Integer
 'dsoHTSetHTriggerLength(WORD nDeviceIndex,ULONG nBufferLen,WORD HTriggerPos,WORD nTimeDIV,WORD nCHMod);
 Public Declare Function dsoHTSetHTriggerLength Lib "HTHardDll.dll" (ByVal nDeviceIndex As Integer, ByVal nBufferLen As Long, ByVal HTriggerPos As Integer, ByVal nTimeDIV As Integer, ByVal nYTFormat As Integer) As Integer
 'dsoHTGetState(WORD nDeviceIndex);
@@ -19,7 +19,7 @@ Public Declare Function dsoHTSetCHAndTriggerVB Lib "HTHardDll.dll" (ByVal nDevic
 'dsoHTGetData(WORD nDeviceIndex,WORD* pCH1Data,WORD* pCH2Data,WORD* pCH3Data,WORD* pCH4Data,PCONTROLDATA pControl/*,ULONG* p1,ULONG* p2,ULONG* p3*/)
 
 
-Public Declare Function dsoHTGetData Lib "HTHardDll.dll" (ByVal nDeviceInder As Integer, CH1Data As Integer, CH2Data As Integer, CH3Data As Integer, CH4Data As Integer, pSTControl As Long) As Integer
+Public Declare Function dsoHTGetData Lib "HTHardDll.dll" (ByVal nDeviceInder As Integer, CH1Data As Integer, CH2Data As Integer, CH3Data As Integer, CH4Data As Integer, pSTControl As Any) As Integer
 'dsoHTStartCollectData(WORD nDeviceIndex,WORD nStartControl)
 Public Declare Function dsoHTStartCollectData Lib "HTHardDll.dll" (ByVal nDeviceIndex As Integer, ByVal startcontrol As Long) As Integer
 'dsoHTSetTrigerMode(WORD m_nDeviceIndex,WORD nTriggerMode,WORD nTriggerSlop,WORD nTriggerCouple);
@@ -29,7 +29,7 @@ Public Declare Function dsoHTSetVTriggerLevel Lib "HTHardDll.dll" (ByVal nDevice
 'dsoHTSetCHPos(WORD nDeviceIndex,WORD* pLevel,WORD nVoltDIV,WORD nPos,WORD nCH,WORD nCHMode)
 Public Declare Function dsoHTSetCHPos Lib "HTHardDll.dll" (ByVal nDeviceInder As Integer, pLevel As Integer, ByVal CHVoltDIV As Integer, ByVal CHPos As Integer, ByVal CH As Integer, ByVal chmod As Integer) As Integer
 'dsoHTSetADC(WORD DeviceIndex, PRELAYCONTROL RelayControl, WORD nTimeDIV)
-Public Declare Function dsoHTSetADC Lib "HTHardDll.dll" (ByVal nDeviceInder As Integer, pRelayControl As Long, ByVal TimeDIV As Integer) As Integer
+Public Declare Function dsoHTSetADC Lib "HTHardDll.dll" (ByVal nDeviceInder As Integer, pRelayControl As Any, ByVal TimeDIV As Integer) As Integer
 'dsoInitADCOnce(WORD DeviceIndex)
 Public Declare Function dsoInitADCOnce Lib "HTHardDll.dll" (ByVal nDeviceInder As Integer) As Integer
 'dsoHTADCCHModGain(WORD DeviceIndex,WORD nCHMod);
