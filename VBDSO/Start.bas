@@ -27,7 +27,7 @@ Dim i As Long
     TimeDIV = 12
     YTFormat = 0
     stControl.nCHSet = 15
-    stControl.nTimeDIV = TimeDIV
+    stControl.nTimeDiv = TimeDIV
     stControl.nTriggerSource = 0
     stControl.nHTriggerPos = 50
     stControl.nVTriggerPos = LeverPos(0)
@@ -94,9 +94,8 @@ Public Sub InitHard()
         Next i
     End If
     result = dsoHTSetSampleRate(DeviceIndex, pAmpLevel(0), YTFormat, rcRelayControl, stControl) '设置采样率
-    result = dsoHTSetCHAndTrigger(DeviceIndex, rcRelayControl, 0, stControl) '设置通道开关和电压档位
-    result = dsoHTSetRamAndTrigerControl(DeviceIndex, (stControl.nTimeDIV), (stControl.nCHSet), (stControl.nTriggerSource), 0) '设置触发源
-    result = dsoHTSetADC(DeviceIndex, rcRelayControl, stControl.nTimeDIV)
+    result = dsoHTSetCHAndTrigger(DeviceIndex, rcRelayControl, stControl.nTimeDiv) '设置通道开关和电压档位
+    result = dsoHTSetRamAndTrigerControl(DeviceIndex, (stControl.nTimeDiv), (stControl.nCHSet), (stControl.nTriggerSource), 0) '设置触发源
     For i = 0 To 3
         result = dsoHTSetCHPos(DeviceIndex, CalLevel(0), rcRelayControl.nCHVoltDIV(i), 128, i, 4)
     Next i

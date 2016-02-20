@@ -24,6 +24,7 @@ Type CONTROLDATA
     nETSOpen As Integer
     nDriverCode As Integer
     nLastAddress As Long
+    nFPGAVersion As Integer
 End Type
 
 Type COLORREF

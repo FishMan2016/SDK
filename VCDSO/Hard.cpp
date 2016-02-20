@@ -42,6 +42,7 @@ CHard::CHard()
 	m_stControl.nReadDataLen = BUF_4K_LEN;//Factory Setup
 	m_stControl.nAlreadyReadLen = BUF_4K_LEN;//Factory Setup
 	m_stControl.nALT = 0;//Factory Setup
+	m_stControl.nFPGAVersion = 0xa000;//Factory Setup
 	for(i=0;i<MAX_CH_NUM;i++)
 	{
 		RelayControl.bCHEnable[i] = 1;
@@ -112,9 +113,9 @@ void CHard::Init()
 			}
 	}
 	dsoHTSetSampleRate(m_nDeviceIndex,pAmpLevel,m_nYTFormat,&RelayControl,&m_stControl);//设置采样率
-	dsoHTSetCHAndTrigger(m_nDeviceIndex,&RelayControl,0,&m_stControl);//设置通道开关和电压档位
+	dsoHTSetCHAndTrigger(m_nDeviceIndex,&RelayControl,m_stControl.nTimeDIV);//设置通道开关和电压档位
 	dsoHTSetRamAndTrigerControl(m_nDeviceIndex,m_stControl.nTimeDIV,m_stControl.nCHSet,m_stControl.nTriggerSource,0);//设置触发源
-	dsoHTSetADC(m_nDeviceIndex,&RelayControl,m_stControl.nTimeDIV);
+//	dsoHTSetADC(m_nDeviceIndex,&RelayControl,m_stControl.nTimeDIV);
 	for(int i=0;i<MAX_CH_NUM;i++)
 	{
 		dsoHTSetCHPos(m_nDeviceIndex,m_nCalLevel,RelayControl.nCHVoltDIV[i],128,i,4);

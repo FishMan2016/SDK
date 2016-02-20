@@ -9,9 +9,9 @@ Public Declare Function dsoHTReadCalibrationData Lib "HTHardDll.dll" (ByVal nDev
 'dsoHTSetSampleRate(WORD nDeviceIndex,WORD *pAmpLevel,WORD nYTFormat,PRELAYCONTROL pRelayControl,PCONTROLDATA pControl)
 Public Declare Function dsoHTSetSampleRate Lib "HTHardDll.dll" (ByVal nDeviceIndex As Integer, pAmpLevel As Integer, ByVal nYTFormat As Integer, pRelayControl As Any, pSTControl As Any) As Integer
 'dsoHTSetCHAndTrigger(WORD nDeviceIndex,PRELAYCONTROL pRelayControl,WORD nDriverCode,PCONTROLDATA pControl)
-Public Declare Function dsoHTSetCHAndTrigger Lib "HTHardDll.dll" (ByVal nDeviceIndex As Integer, rcRelayControl As Any, ByVal Driver As Integer, pSTControl As Any) As Integer
+Public Declare Function dsoHTSetCHAndTrigger Lib "HTHardDll.dll" (ByVal nDeviceIndex As Integer, rcRelayControl As Any, ByVal nTimeDiv As Integer) As Integer
 'dsoHTSetHTriggerLength(WORD nDeviceIndex,ULONG nBufferLen,WORD HTriggerPos,WORD nTimeDIV,WORD nCHMod);
-Public Declare Function dsoHTSetHTriggerLength Lib "HTHardDll.dll" (ByVal nDeviceIndex As Integer, ByVal nBufferLen As Long, ByVal HTriggerPos As Integer, ByVal nTimeDIV As Integer, ByVal nYTFormat As Integer) As Integer
+Public Declare Function dsoHTSetHTriggerLength Lib "HTHardDll.dll" (ByVal nDeviceIndex As Integer, ByVal nBufferLen As Long, ByVal HTriggerPos As Integer, ByVal nTimeDiv As Integer, ByVal nYTFormat As Integer) As Integer
 'dsoHTGetState(WORD nDeviceIndex);
 Public Declare Function dsoHTGetState Lib "HTHardDll.dll" (ByVal nDeviceIndex As Integer) As Integer
 'dsoHTSetCHAndTriggerVB(WORD nDeviceIndex,WORD* pCHEnable,WORD* pCHVoltDIV,WORD* pCHCoupling,WORD* pCHBWLimit,WORD nTriggerSource,WORD nTriggerFilt,WORD nALT,WORD nDriverCode);
@@ -28,8 +28,7 @@ Public Declare Function dsoHTSetTrigerMode Lib "HTHardDll.dll" (ByVal nDeviceInd
 Public Declare Function dsoHTSetVTriggerLevel Lib "HTHardDll.dll" (ByVal nDeviceIndex As Integer, pLevel As Integer, ByVal nPos As Integer, ByVal chmod As Integer) As Integer
 'dsoHTSetCHPos(WORD nDeviceIndex,WORD* pLevel,WORD nVoltDIV,WORD nPos,WORD nCH,WORD nCHMode)
 Public Declare Function dsoHTSetCHPos Lib "HTHardDll.dll" (ByVal nDeviceInder As Integer, pLevel As Integer, ByVal CHVoltDIV As Integer, ByVal CHPos As Integer, ByVal CH As Integer, ByVal chmod As Integer) As Integer
-'dsoHTSetADC(WORD DeviceIndex, PRELAYCONTROL RelayControl, WORD nTimeDIV)
-Public Declare Function dsoHTSetADC Lib "HTHardDll.dll" (ByVal nDeviceInder As Integer, pRelayControl As Any, ByVal TimeDIV As Integer) As Integer
+
 'dsoInitADCOnce(WORD DeviceIndex)
 Public Declare Function dsoInitADCOnce Lib "HTHardDll.dll" (ByVal nDeviceInder As Integer) As Integer
 'dsoHTADCCHModGain(WORD DeviceIndex,WORD nCHMod);
