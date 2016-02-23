@@ -4,6 +4,8 @@
 Hard::Hard()
 {
 
+    m_bDraw=false;
+    m_bStartC=true;
     ULONG i = 0;
     m_nDeviceIndex = 0;
     m_nDeviceNum = 0;
@@ -69,37 +71,37 @@ Hard::Hard()
         }
         myFunction5(m_nDeviceIndex,bCHEmable,RelayControl.nCHVoltDIV,RelayControl.nCHCoupling,bCHBWLimit,(WORD)0,(WORD)0,nFlag,(WORD)6);
     }
-
 }
 void Hard::Init()
 {
-     QLibrary hardLib("HTHardDll.dll");
+    QLibrary hardLib("HTHardDll.dll");
+    hardLib.setLoadHints( QLibrary::ResolveAllSymbolsHint);
+    hardLib.load();
     m_nDeviceIndex = 0;
-
 
     {
         typedef WORD (*MyPrototypeA)(WORD );
         MyPrototypeA myFunctionA = (MyPrototypeA) hardLib.resolve("dsoSetUSBBus");
         myFunctionA(m_nDeviceIndex);
-        Sleep(5);
+
     }
     {
         typedef WORD (*MyPrototypeB)(WORD );
         MyPrototypeB myFunctionB = (MyPrototypeB) hardLib.resolve("dsoInitADCOnce");
         myFunctionB(m_nDeviceIndex);
-        Sleep(5);
+
     }
     {
         typedef WORD (*MyPrototype2)(WORD ,WORD);
         MyPrototype2 myFunction2 = (MyPrototype2) hardLib.resolve("dsoHTADCCHModGain");
         myFunction2(m_nDeviceIndex,4);
-        Sleep(5);
+
     }
     {
         typedef WORD (*MyPrototype3)(WORD ,WORD*,WORD);
         MyPrototype3 myFunction3 = (MyPrototype3) hardLib.resolve("dsoHTReadCalibrationData");
         myFunction3(m_nDeviceIndex,m_nCalLevel,CAL_LEVEL_LEN);
-        Sleep(5);
+
 
         if(m_nCalLevel[CAL_LEVEL_LEN-1]!=ZERO_FLAG){
             for(int i=0;i< ZEROCALI_LEN;i++){
@@ -137,12 +139,15 @@ void Hard::Init()
         MyPrototype4 myFunction4 = (MyPrototype4) hardLib.resolve("dsoHTSetSampleRate");
         myFunction4(m_nDeviceIndex,pAmpLevel,m_nYTFormat,&RelayControl,&m_stControl);
         Sleep(5);
+        hardLib.unload();
     }
     {
         Init2();
+        Init3();
+        Init4();
         //typedef WORD (*MyPrototype6)(WORD,WORD,WORD,WORD,WORD);
-       // MyPrototype6 myFunction6 = (MyPrototype6) hardLib.resolve("dsoHTSetRamAndTrigerControl");
-       // WORD hhh=0;
+        // MyPrototype6 myFunction6 = (MyPrototype6) hardLib.resolve("dsoHTSetRamAndTrigerControl");
+        // WORD hhh=0;
         // myFunction6(m_nDeviceIndex,m_stControl.nTimeDIV,m_stControl.nCHSet,m_stControl.nTriggerSource,hhh);
     }
     /*
@@ -164,21 +169,102 @@ void Hard::Init()
 
 */
 }
-void Hard::ReadData()
-{
 
-}
-void Hard::SourceToDisplay(USHORT *pData, ULONG nDataLen, USHORT nCH)
-{
-
-}
 void Hard::Init2()
 {
     QLibrary hardLib("HTHardDll.dll");
     typedef WORD (*MyPrototype6)(WORD,WORD,WORD,WORD,WORD);
-     MyPrototype6 myFunction6 = (MyPrototype6) hardLib.resolve("dsoHTSetRamAndTrigerControl");
-    WORD hhh=0;
-   myFunction6(m_nDeviceIndex,m_stControl.nTimeDIV,m_stControl.nCHSet,m_stControl.nTriggerSource,hhh);
+    MyPrototype6 myFunction6 = (MyPrototype6) hardLib.resolve("dsoHTSetRamAndTrigerControl");
+    myFunction6(m_nDeviceIndex,m_stControl.nTimeDIV,m_stControl.nCHSet,m_stControl.nTriggerSource,0);
+    hardLib.unload();
+}
+void Hard::Init3()
+{
+    QLibrary hardLib("HTHardDll.dll");
+    // hardLib.setLoadHints(QLibrary::ExportExternalSymbolsHint);
+
+    typedef WORD (*MyPrototype7)(WORD,WORD*,WORD,WORD,WORD,WORD);
+
+    for(int i=0;i<2;i++)
+    {
+        MyPrototype7 myFunction7 = (MyPrototype7) hardLib.resolve("dsoHTSetCHPos");
+        //(WORD nDeviceIndex,WORD* pLevel,WORD nVoltDIV,WORD nPos,WORD nCH,WORD nCHMode)
+        myFunction7(m_nDeviceIndex,m_nCalLevel,RelayControl.nCHVoltDIV[i],(WORD)128,(WORD)i,(WORD)4);
+    }
 
 
+}
+
+
+void Hard::Init4()
+{
+    QLibrary hardLib("HTHardDll.dll");
+    hardLib.load();
+    typedef WORD (*MyPrototype8)(WORD,WORD*,WORD,WORD);
+    MyPrototype8 myFunction8 = (MyPrototype8) hardLib.resolve("dsoHTSetVTriggerLevel");
+    myFunction8(m_nDeviceIndex,m_nCalLevel,255-m_nLeverPos[CH1],(WORD)4);
+
+
+    typedef WORD (*MyPrototype9)(WORD,WORD,WORD,WORD);
+    MyPrototype9 myFunction9 = (MyPrototype9) hardLib.resolve("dsoHTSetTrigerMode");
+    myFunction9(m_nDeviceIndex,m_nTriggerMode,m_stControl.nTriggerSlope,(WORD)0);
+
+    //dsoHTSetTrigerMode(m_nDeviceIndex,m_nTriggerMode,m_stControl.nTriggerSlope,DC);
+
+
+}
+void Hard::SourceToDisplay(USHORT* pData,ULONG nDataLen,USHORT nCH)
+{
+    for(ULONG i=0;i<nDataLen;i++)
+    {
+        *(m_pSrcData[nCH]+i) = *(pData+i)-(MAX_DATA - m_nLeverPos[nCH]);
+    }
+}
+WORD Hard::startAStatus()
+{
+    WORD nTemp;
+    QLibrary hardLib("HTHardDll.dll");
+    if(m_bStartC)
+    {
+        typedef WORD (*MyPrototype8)(WORD,WORD);
+        MyPrototype8 myFunction8 = (MyPrototype8) hardLib.resolve("dsoHTStartCollectData");
+        myFunction8(m_nDeviceIndex,(WORD)3);
+        m_bStartC=false;
+        return 0;
+    }
+    //dsoHTStartCollectData(m_Hard.m_nDeviceIndex,nStartControl);
+    typedef WORD (*MyPrototype11)(WORD);
+    MyPrototype11 myFunction11 = (MyPrototype11) hardLib.resolve("dsoHTGetState");
+    return myFunction11(m_nDeviceIndex);
+    //dsoHTGetState(m_Hard.m_nDeviceIndex);
+
+}
+void Hard::ReadData()
+{
+
+    WORD nTmep=startAStatus();
+    if(nTmep<2)
+        return;
+    int i=0;
+    USHORT* pReadData[MAX_CH_NUM];
+    for(i=0;i<MAX_CH_NUM;i++)
+    {
+        pReadData[i] = new USHORT[m_stControl.nReadDataLen];
+        memset(pReadData[i],0,m_stControl.nReadDataLen*sizeof(USHORT));
+    }
+    QLibrary hardLib("HTHardDll.dll");
+    typedef WORD (*MyPrototype10)(WORD,USHORT*,USHORT*,USHORT*,USHORT*,CONTROLDATA *pControl);
+    MyPrototype10 myFunction10 = (MyPrototype10) hardLib.resolve("dsoHTGetData");
+    myFunction10(m_nDeviceIndex,pReadData[CH1],pReadData[CH2],pReadData[CH3],pReadData[CH4],&m_stControl);
+
+    m_bDraw=true;
+    for(i=0;i<MAX_CH_NUM;i++)
+    {
+        SourceToDisplay(pReadData[i],m_stControl.nReadDataLen,i);
+    }
+
+    for(i=0;i<MAX_CH_NUM;i++)
+    {
+        delete pReadData[i];
+    }
 }

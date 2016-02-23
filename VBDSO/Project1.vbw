@@ -1,4 +1,4 @@
 MainForm = 242, 319, 1355, 1029, C, 22, 29, 1135, 740, C
-Start = 44, 58, 1157, 768, Z
+Start = 414, 76, 1527, 786, C
 DeclareFun = 22, 29, 1135, 740, C
-DeclareGlobalVal = 88, 116, 1201, 826, 
+DeclareGlobalVal = 126, 173, 1239, 883, 

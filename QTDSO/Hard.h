@@ -5,15 +5,22 @@
 #include <windows.h>
 #include "../../HeadFiles/DefMacro.h"
 
+
 class Hard
 {
+
 public:
     Hard();
     void Init();
     void Init2();
+    void Init3();
+    void Init4();
     void ReadData();
+    WORD startAStatus();
     void SourceToDisplay(USHORT* pData,ULONG nDataLen,USHORT nCH);
 public:
+    bool m_bDraw;
+    bool m_bStartC;
     USHORT m_nDeviceIndex;
     USHORT m_nDeviceNum;
     short* m_pSrcData[MAX_CH_NUM];//读取的数据减去零电平的位置(-255 ~ 255)
