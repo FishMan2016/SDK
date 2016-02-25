@@ -228,7 +228,7 @@ WORD Hard::startAStatus()
     {
         typedef WORD (*MyPrototype8)(WORD,WORD);
         MyPrototype8 myFunction8 = (MyPrototype8) hardLib.resolve("dsoHTStartCollectData");
-        myFunction8(m_nDeviceIndex,(WORD)3);
+        myFunction8(m_nDeviceIndex,(WORD)1);
         m_bStartC=false;
         return 0;
     }

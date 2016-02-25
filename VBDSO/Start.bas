@@ -114,7 +114,7 @@ Public Sub CollectData()
         Dim nStartControl As Integer
         nStartControl = 0
         nStartControl = nStartControl + IIf(TriggerSweep = 0, 1, 0)
-        nStartControl = nStartControl + IIf(YTFormat = 0, 2, 0)
+        nStartControl = nStartControl + IIf(YTFormat = 0, 0, 2)
         nStartControl = nStartControl + IIf(Collect = 1, 0, 4)
         result = dsoHTStartCollectData(DeviceIndex, nStartControl)
         StartNew = False
